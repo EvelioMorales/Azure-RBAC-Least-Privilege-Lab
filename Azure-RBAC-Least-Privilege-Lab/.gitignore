@@ -1,0 +1,15 @@
+# Local and Terraform files
+.DS_Store
+Thumbs.db
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+crash.log
+
+# Credentials and secrets
+.env
+*.pem
+*.key
+credentials*
+
