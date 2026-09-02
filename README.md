@@ -60,49 +60,49 @@ Azure RBAC answers three questions:
 
 I created `rg-security-lab` in Central US. Scoping the exercise to a dedicated resource group prevents the test identity from receiving access across the entire subscription.
 
-![Create the security lab resource group](images/01-create-resource-group.png)
+![Create the security lab resource group](Azure-RBAC-Least-Privilege-Lab/images/01-create-resource-group.png)
 
 ### 2. Create the test identity
 
 I created a separate Microsoft Entra ID user named `cloudreader`. A dedicated test identity makes it possible to validate the user experience without changing the permissions of an administrator account.
 
-![Create and verify the cloudreader user](images/02-create-test-user.png)
+![Create and verify the cloudreader user](Azure-RBAC-Least-Privilege-Lab/images/02-create-test-user.png)
 
 ### 3. Open resource-group IAM
 
 From `rg-security-lab`, I opened **Access control (IAM)**. Assigning access here limits the role to this resource group instead of granting subscription-wide permissions.
 
-![Open access control for the resource group](images/03-open-resource-group-iam.png)
+![Open access control for the resource group](Azure-RBAC-Least-Privilege-Lab/images/03-open-resource-group-iam.png)
 
 ### 4. Select the Reader role
 
 I selected the built-in **Reader** role. Reader permits control-plane visibility but does not permit resource changes.
 
-![Select the Azure Reader role](images/04-select-reader-role.png)
+![Select the Azure Reader role](Azure-RBAC-Least-Privilege-Lab/images/04-select-reader-role.png)
 
 ### 5. Verify the assignment and scope
 
 Using **Check access**, I confirmed that the test identity had one current role assignment: **Reader**, scoped to **This resource**. This verifies both the role and its boundary.
 
-![Verify the Reader role assignment](images/05-verify-reader-assignment.png)
+![Verify the Reader role assignment](Azure-RBAC-Least-Privilege-Lab/images/05-verify-reader-assignment.png)
 
 ### 6. Sign in as the test user
 
 I used a separate browser session to sign in as `cloudreader`. Separate sessions prevent an administrator's cached token from affecting the test.
 
-![Sign in as cloudreader](images/06-test-user-sign-in.png)
+![Sign in as cloudreader](Azure-RBAC-Least-Privilege-Lab/images/06-test-user-sign-in.png)
 
 ### 7. Validate read access
 
 The test identity could locate and view `rg-security-lab`, confirming that the Reader assignment had propagated and that the user was operating in the correct tenant and subscription.
 
-![Reader can view the scoped resource group](images/07-reader-can-view-resource-group.png)
+![Reader can view the scoped resource group](Azure-RBAC-Least-Privilege-Lab/images/07-reader-can-view-resource-group.png)
 
 ### 8. Test a write operation
 
 I attempted to begin a virtual-machine deployment. Azure displayed that `Microsoft.Compute` was not registered and that the test user did not have permission to register the provider. The result is consistent with the Reader role's inability to perform write operations.
 
-![Write operation blocked for Reader identity](images/08-write-action-blocked.png)
+![Write operation blocked for Reader identity](Azure-RBAC-Least-Privilege-Lab/images/08-write-action-blocked.png)
 
 > **Evidence note:** This screenshot contains two related conditions: the resource provider was unregistered, and the Reader identity lacked permission to register it. It demonstrates a blocked write path, but it is not a clean single-cause `AuthorizationFailed` test of VM creation. A stronger follow-up would register `Microsoft.Compute` with an authorized account first, retry the write action as `cloudreader`, and capture the resulting authorization event in the Azure Activity Log.
 
@@ -110,7 +110,7 @@ I attempted to begin a virtual-machine deployment. Azure displayed that `Microso
 
 The resource group remained empty, so the access test did not create billable infrastructure.
 
-![Resource group remains empty](images/09-resource-group-overview.png)
+![Resource group remains empty](Azure-RBAC-Least-Privilege-Lab/images/09-resource-group-overview.png)
 
 ## Troubleshooting approach
 
